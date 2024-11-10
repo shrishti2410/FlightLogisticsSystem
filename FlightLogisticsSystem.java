@@ -1,16 +1,145 @@
+import java.io.BufferedReader;
 import java.util.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+class User{
+    String name;
+    long mobileNo;
+    int age;
+    String emailId;
+    public void user_details(){//taking details of customer
+        Scanner sc=new Scanner(System.in);
+        System.out.println("Enter the first name of customer");
+        name = sc.nextLine();
+        System.out.println("Enter the last name of customer");
+        name = sc.nextLine();
+        System.out.println("Enter the age");
+        age=sc.nextInt();
+        System.out.println("Enter the mobileNo");
+        mobileNo=sc.nextLong();
+        System.out.println("Enter the email Id");
+        emailId=sc.next();
+        if(emailId.contains("@")) {
+            System.out.println("Valid E mail Id");
+        }
+        else{
+            System.out.println("Invalid Email Id");
+        }
+       //USE OF WHILE LOOP TILL THE USER ENTERS VALID EMAIL
+        while(!emailId.contains("@")){
+            System.out.println("Enter the valid E mail (It must contain @)");
+            emailId=sc.next();
+        }
+        if(emailId.contains("@")){
+            System.out.println("Thank You!");
+        }
+    }
+    public void booking(){
+
+    }
+
+}
+class WeatherService {
+
+    private static final String API_KEY = "ba45b9824ab3e00ac24a08b49cd9e93b"; // Ensure there are no leading or trailing spaces
+    private static final String BASE_URL = "https://api.openweathermap.org/data/2.5/weather?q=";
+
+    public static String getWeatherForCity(String cityName) {
+        try {
+            // URL encode the city name to handle spaces and special characters
+            String encodedCityName = URLEncoder.encode(cityName, StandardCharsets.UTF_8.toString());
+            String urlString = BASE_URL + encodedCityName + "&appid=" + API_KEY + "&units=metric";
+            URL url = new URL(urlString);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+
+            while ((line = in.readLine()) != null) {
+                response.append(line);
+            }
+            in.close();
+
+            return parseWeatherData(response.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Could not fetch weather data.";
+        }
+
+    }
+
+    // Add these parameters to the parsing function
+    private static String parseWeatherData(String jsonResponse) {
+        JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
+        JsonObject main = jsonObject.getAsJsonObject("main");
+        JsonObject weather = jsonObject.getAsJsonArray("weather").get(0).getAsJsonObject();
+        JsonObject wind = jsonObject.getAsJsonObject("wind");
+
+        double temperature = main.get("temp").getAsDouble();
+        String description = weather.get("description").getAsString();
+        int humidity = main.get("humidity").getAsInt();
+        double windSpeed = wind.get("speed").getAsDouble() * 3.6; // Convert from m/s to km/h
+        int windDegree = wind.get("deg").getAsInt(); // Wind direction
+        double visibility = jsonObject.has("visibility") ? jsonObject.get("visibility").getAsDouble() : 10000; // Visibility in meters (default to 10 km)
+
+        // Safety check criteria (you can adjust the thresholds as necessary)
+        boolean isSafe = true;
+        StringBuilder message = new StringBuilder();
+
+        if (windSpeed > 50) { // Wind speed > 50 km/h is considered risky for flights
+            isSafe = false;
+            message.append("High wind speeds detected. Flights may be rescheduled. ");
+        }
+
+        if (visibility < 2000) { // Visibility less than 2 km could be problematic
+            isSafe = false;
+            message.append("Low visibility detected. Flights may be rescheduled. ");
+        }
+
+        if (description.toLowerCase().contains("thunderstorm") || description.toLowerCase().contains("snow")) {
+            isSafe = false;
+            message.append("Adverse weather conditions detected (thunderstorms, snow). Flights may be rescheduled. ");
+        }
+
+        // Default message for safe conditions
+        if (isSafe) {
+            message.append("Arrivals and departures are likely safe.");
+        } else {
+            message.append("Conditions indicate potential delays or rescheduling.");
+        }
+
+        // Return weather details along with the safety message
+        return String.format("Temperature: %.1f°C, Condition: %s, Humidity: %d%%, Wind Speed: %.1f km/h, Visibility: %.0f meters, Status: %s",
+                temperature, description, humidity, windSpeed, visibility, message.toString());
+    }
+}
+
+//import static org.example.WeatherService.getWeatherForCity;
 
 class Flight {
     String airline;
     String destination;
     int cost;
     int time;
-
-    public Flight(String airline, String destination, int cost, int time) {
+    String flightNo;
+    public Flight(String airline, String destination, int cost, int time, String flightNo) {
         this.airline = airline;
         this.destination = destination;
         this.cost = cost;
         this.time = time;
+        this.flightNo = flightNo;
     }
 }
 
@@ -30,12 +159,22 @@ class Node {
 
 public class FlightLogisticsSystem {
     private static Map<String, List<Flight>> flightsGraph = new HashMap<>();
-
-    public static void addFlight(String source, String destination, String airline, int cost, int time) {
-        flightsGraph.putIfAbsent(source, new ArrayList<>());
-        flightsGraph.get(source).add(new Flight(airline, destination, cost, time));
+    static List<String> badWeatherCities = new ArrayList<>();
+    public static void addFlight(String source, String destination, String airline, int cost, int time, String flightNo) {
+        if(WeatherService.getWeatherForCity(source).contains("safe") && WeatherService.getWeatherForCity(destination).contains("safe")) {
+            flightsGraph.putIfAbsent(source, new ArrayList<>());
+            flightsGraph.get(source).add(new Flight(airline, destination, cost, time,flightNo));
+        }else{
+//            System.out.println("for "+source+ ": "+ getWeatherForCity(source));
+//            System.out.println("for "+destination+ ": "+ getWeatherForCity(destination));
+            if(WeatherService.getWeatherForCity(source).contains("rescheduled") && !badWeatherCities.contains(source)) {
+                badWeatherCities.add(source);
+            }
+            if(WeatherService.getWeatherForCity(destination).contains("rescheduled") && !badWeatherCities.contains(destination)){
+                badWeatherCities.add(destination);
+            }
+        }
     }
-
     public static void findCheapestFlight(String src, String dest) {
         PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a.cost));
         Map<String, Integer> minCost = new HashMap<>();
@@ -124,7 +263,7 @@ public class FlightLogisticsSystem {
                 System.out.println("Minimum time to " + dest + " is " + timeSoFar + " minutes with cost " + currentNode.cost);
                 System.out.println("Flights to take:");
                 for (Flight flight : currentNode.path) {
-                    System.out.println("Airline: " + flight.airline + ", From: " + currentCity + ", To: " + flight.destination + ", Cost: " + flight.cost + ", Time: " + flight.time + " minutes.");
+                    System.out.println("Airline: " + flight.airline + ", From: " + src + ", To: " + flight.destination + ", Cost: " + flight.cost + ", Time: " + flight.time + " minutes.");
                     currentCity = flight.destination;
                 }
                 return;
@@ -253,75 +392,103 @@ public class FlightLogisticsSystem {
     }
 
 
+
+
     public static void main(String[] args) {
-        addFlight("Chennai", "Delhi", "Spice Jet", 10000, 180);
-        addFlight("Chennai", "Kolkata", "Air India", 6000, 120);
+        System.out.println(" We appreciate your patience while we are fetching real-time weather data to ensure your journey safe. ");
+        addFlight("Chennai", "Delhi", "Spice Jet", 10000, 180, "SG801");
+        addFlight("Chennai", "Kolkata", "Air India", 6000, 120,"AI801");
 
-        addFlight("Delhi", "Kolkata", "Air India", 6000,150);
-        addFlight("Delhi", "Mumbai", "Indigo", 6000,120);
-        addFlight("Delhi", "Pune", "Air India", 8000,120);
-        addFlight("Delhi", "Hyderabad", "Indigo", 7000,180);
+        addFlight("Delhi", "Kolkata", "Air India", 6000, 150,"AI802");
+        addFlight("Delhi", "Mumbai", "Indigo", 6000, 120,"6E801");
+        addFlight("Delhi", "Pune", "Air India", 8000, 120,"AI803");
+        addFlight("Delhi", "Hyderabad", "Indigo", 7000, 180,"6E802");
 
-        addFlight("Kolkata", "Bangalore", "Air India", 6000,120);
-        addFlight("Kolkata", "Hyderabad", "Indigo", 7000,90);
+        addFlight("Kolkata", "Bangalore", "Air India", 6000, 120,"AI804");
+        addFlight("Kolkata", "Hyderabad", "Indigo", 7000, 90,"6E803");
 
-        addFlight("Bhubaneswar", "Mumbai", "Air India", 6000,150);
-        addFlight("Bhubaneswar", "Kolkata", "Indigo", 5000,90);
+        addFlight("Bhubaneswar", "Mumbai", "Air India", 6000, 150,"AI805");
+        addFlight("Bhubaneswar", "Kolkata", "Indigo", 5000, 90,"6E804");
 
-        addFlight("Jaipur", "Kolkata", "Air India", 6000,90);
-        addFlight("Jaipur", "Bhopal", "Indigo", 5000,60);
+        addFlight("Jaipur", "Kolkata", "Air India", 6000, 90,"AI806");
+        addFlight("Jaipur", "Bhopal", "Indigo", 5000, 60,"6E805");
 
-        addFlight("Bhopal", "Hyderabad", "Spice Jet", 5000,120);
-        addFlight("Bhopal", "Mumbai", "Spice Jet", 7000,120);
+        addFlight("Bhopal", "Hyderabad", "Spice Jet", 5000, 120,"SG802");
+        addFlight("Bhopal", "Mumbai", "Spice Jet", 7000, 120,"SG803");
 
-        addFlight("Mumbai", "Delhi", "Spice Jet", 5000,120);
-        addFlight("Mumbai", "Bhopal", "Air India", 4000,120);
-        addFlight("Mumbai", "Jaipur", "Indigo", 5000,90);
-        addFlight("Mumbai", "Delhi", "Air India", 8000,120);
-        addFlight("Mumbai", "Bhopal", "Indigo", 3000,120);
-        addFlight("Mumbai", "Jaipur", "Air India", 7000,90);
+        addFlight("Mumbai", "Delhi", "Spice Jet", 5000, 120,"SG804");
+        addFlight("Mumbai", "Bhopal", "Air India", 4000, 120,"AI807");
+        addFlight("Mumbai", "Jaipur", "Indigo", 5000, 90,"6E806");
+        addFlight("Mumbai", "Delhi", "Air India", 8000, 120,"AI808");
+        addFlight("Mumbai", "Bhopal", "Indigo", 3000, 120,"6E807");
+        addFlight("Mumbai", "Jaipur", "Air India", 7000, 90,"AI809");
 
-        addFlight("Pune", "Hyderabad", "Spice Jet", 5000,120);
-        addFlight("Pune", "Bangalore", "Air India", 6000,120);
-        addFlight("Pune", "Hyderabad", "Air India", 5000,120);
-        addFlight("Pune", "Bangalore", "Spice Jet", 3000,120);
-        addFlight("Pune", "Mumbai", "Indigo", 20000,20);
+        addFlight("Pune", "Hyderabad", "Spice Jet", 5000, 120,"SG805");
+        addFlight("Pune", "Bangalore", "Air India", 6000, 120,"AI810");
+        addFlight("Pune", "Hyderabad", "Air India", 5000, 120,"AI810");
+        addFlight("Pune", "Bangalore", "Spice Jet", 3000, 120,"SG806");
+        addFlight("Pune", "Mumbai", "Indigo", 20000, 20,"6E808");
 
-        addFlight("Hyderabad", "Delhi", "Spice Jet", 7000,150);
-        addFlight("Hyderabad", "Bangalore", "Air India", 3000,45);
-        addFlight("Hyderabad", "Chennai", "Indigo", 2000,45);
+        addFlight("Hyderabad", "Delhi", "Spice Jet", 7000, 150,"SG806");
+        addFlight("Hyderabad", "Bangalore", "Air India", 3000, 45,"AI811");
+        addFlight("Hyderabad", "Chennai", "Indigo", 2000, 45,"6E809");
 
-        addFlight("Bangalore", "Bhubaneswar", "Spice Jet", 7000,75);
-        addFlight("Bangalore", "Mumbai", "Air India", 7000,90);
-        addFlight("Bangalore", "Delhi", "Indigo", 5000,120);
+        addFlight("Bangalore", "Bhubaneswar", "Spice Jet", 7000, 75,"SG807");
+        addFlight("Bangalore", "Mumbai", "Air India", 7000, 90,"AI812");
+        addFlight("Bangalore", "Delhi", "Indigo", 5000, 120,"6E810");
 
         Scanner sc = new Scanner(System.in);
+        System.out.println(badWeatherCities);
         System.out.println("Enter source city: ");
         String source = sc.nextLine();
+        if (badWeatherCities.contains(source)) {
+            System.out.println("Sorry no flights available due to bad weather. Details of the weather are as follows: ");
+            System.out.println(WeatherService.getWeatherForCity(source));
+            return;
+        }
         System.out.println("Enter destination city: ");
         String destination = sc.nextLine();
+        if (badWeatherCities.contains(destination)) {
+            System.out.println("Sorry no flights available due to bad weather. Details of the weather are as follows: ");
+            System.out.println(WeatherService.getWeatherForCity(destination));
+            return;
+        }
+        System.out.println("Welcome to AirEase - Your Ultimate Flight Logistics Companion!");
+        System.out.println("Effortlessly manage flights, track routes, and ensure a smooth journey for passengers and cargo alike. From real-time updates to optimized routing, AirEase is here to make airline management simpler and more efficient.");
+        System.out.println("Fasten your seatbelt, and let’s get started!");
+        System.out.println("Enter 1 to execute admin functionality and 2 to execute user functionality. ");
+        int adminOrUser = sc.nextInt();
+        switch (adminOrUser) {
+            case 1 :
 
-        System.out.println("Choose an option: \n1. Minimum cost\n2. All possible routes sorted by cost\n3. Minimum time\n4. All possible routes sorted by time\n5. Flights with/without layovers");
-        int choice = sc.nextInt();
 
-        switch (choice) {
-            case 1:
-                findCheapestFlight(source, destination);
-                break;
-            case 2:
-                findAllFlightsSortedByCost(source, destination);
-                break;
-            case 3:
-                findFastestFlight(source, destination);
-                break;
-            case 4:
-                findAllFlightsSortedByTime(source, destination);
-                break;
-            case 5:
-                WithHaltsOrWithout(source, destination);
-                break;
-            default:
-                System.out.println("Invalid option!");
+            case 2 :
+                System.out.println("Choose an option: \n1. Minimum cost\n2. All possible routes sorted by cost\n3. Minimum time\n4. All possible routes sorted by time\n5. Flights with/without layovers");
+            int choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    findCheapestFlight(source, destination);
+                    break;
+                case 2:
+                    findAllFlightsSortedByCost(source, destination);
+                    break;
+                case 3:
+                    findFastestFlight(source, destination);
+                    break;
+                case 4:
+                    findAllFlightsSortedByTime(source, destination);
+                    break;
+                case 5:
+                    WithHaltsOrWithout(source, destination);
+                    break;
+                default:
+                    System.out.println("Invalid option!");
+            }
+                // choose src dest airline and then book
+                // show matrix
+                // accept info
+                // confitm
         }
     }
 }
