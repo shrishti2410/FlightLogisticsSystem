@@ -12,43 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-class User{
-    String name;
-    long mobileNo;
-    int age;
-    String emailId;
-    public void user_details(){//taking details of customer
-        Scanner sc=new Scanner(System.in);
-        System.out.println("Enter the first name of customer");
-        name = sc.nextLine();
-        System.out.println("Enter the last name of customer");
-        name = sc.nextLine();
-        System.out.println("Enter the age");
-        age=sc.nextInt();
-        System.out.println("Enter the mobileNo");
-        mobileNo=sc.nextLong();
-        System.out.println("Enter the email Id");
-        emailId=sc.next();
-        if(emailId.contains("@")) {
-            System.out.println("Valid E mail Id");
-        }
-        else{
-            System.out.println("Invalid Email Id");
-        }
-       //USE OF WHILE LOOP TILL THE USER ENTERS VALID EMAIL
-        while(!emailId.contains("@")){
-            System.out.println("Enter the valid E mail (It must contain @)");
-            emailId=sc.next();
-        }
-        if(emailId.contains("@")){
-            System.out.println("Thank You!");
-        }
-    }
-    public void booking(){
 
-    }
-
-}
 class WeatherService {
 
     private static final String API_KEY = "ba45b9824ab3e00ac24a08b49cd9e93b"; // Ensure there are no leading or trailing spaces
@@ -158,7 +122,7 @@ class Node {
 }
 
 public class FlightLogisticsSystem {
-    private static Map<String, List<Flight>> flightsGraph = new HashMap<>();
+    static Map<String, List<Flight>> flightsGraph = new HashMap<>();
     static List<String> badWeatherCities = new ArrayList<>();
     public static void addFlight(String source, String destination, String airline, int cost, int time, String flightNo) {
         if(WeatherService.getWeatherForCity(source).contains("safe") && WeatherService.getWeatherForCity(destination).contains("safe")) {
@@ -439,6 +403,9 @@ public class FlightLogisticsSystem {
 
         Scanner sc = new Scanner(System.in);
         System.out.println(badWeatherCities);
+        System.out.println("Welcome to AirEase - Your Ultimate Flight Logistics Companion!");
+        System.out.println("Effortlessly manage flights, track routes, and ensure a smooth journey for passengers and cargo alike. From real-time updates to optimized routing, AirEase is here to make airline management simpler and more efficient.");
+        System.out.println("Fasten your seatbelt, and let’s get started!");
         System.out.println("Enter source city: ");
         String source = sc.nextLine();
         if (badWeatherCities.contains(source)) {
@@ -453,42 +420,143 @@ public class FlightLogisticsSystem {
             System.out.println(WeatherService.getWeatherForCity(destination));
             return;
         }
-        System.out.println("Welcome to AirEase - Your Ultimate Flight Logistics Companion!");
-        System.out.println("Effortlessly manage flights, track routes, and ensure a smooth journey for passengers and cargo alike. From real-time updates to optimized routing, AirEase is here to make airline management simpler and more efficient.");
-        System.out.println("Fasten your seatbelt, and let’s get started!");
         System.out.println("Enter 1 to execute admin functionality and 2 to execute user functionality. ");
         int adminOrUser = sc.nextInt();
         switch (adminOrUser) {
-            case 1 :
+            case 1: // WHAT HERE????
 
 
-            case 2 :
+            case 2:
                 System.out.println("Choose an option: \n1. Minimum cost\n2. All possible routes sorted by cost\n3. Minimum time\n4. All possible routes sorted by time\n5. Flights with/without layovers");
-            int choice = sc.nextInt();
+                int choice = sc.nextInt();
 
-            switch (choice) {
-                case 1:
-                    findCheapestFlight(source, destination);
-                    break;
-                case 2:
-                    findAllFlightsSortedByCost(source, destination);
-                    break;
-                case 3:
-                    findFastestFlight(source, destination);
-                    break;
-                case 4:
-                    findAllFlightsSortedByTime(source, destination);
-                    break;
-                case 5:
-                    WithHaltsOrWithout(source, destination);
-                    break;
-                default:
-                    System.out.println("Invalid option!");
-            }
-                // choose src dest airline and then book
+                switch (choice) {
+                    case 1:
+                        findCheapestFlight(source, destination);
+                        break;
+                    case 2:
+                        findAllFlightsSortedByCost(source, destination);
+                        break;
+                    case 3:
+                        findFastestFlight(source, destination);
+                        break;
+                    case 4:
+                        findAllFlightsSortedByTime(source, destination);
+                        break;
+                    case 5:
+                        WithHaltsOrWithout(source, destination);
+                        break;
+                    default:
+                        System.out.println("Invalid option!");
+                }
+
+                // choose src dest airline/ flightno and then book
                 // show matrix
                 // accept info
                 // confitm
+                System.out.println("Do you want to proceed to booking now? Enter Y for yes or N for no");
+                String proceedToBooking = sc.nextLine();
+                if(proceedToBooking.equalsIgnoreCase("Y")){
+                    User.booking();
+                }
+                else if(proceedToBooking.equalsIgnoreCase("N")){
+                    return;
+                }
+                else{
+                    System.out.println("Wrong value entered!");
+                }
+
+        }
+
+    }
+}
+class User{
+    static String name;
+    static long mobileNo;
+    static int age;
+    static String emailId;
+    public static void user_details(){//taking details of customer
+        Scanner sc=new Scanner(System.in);
+        System.out.println("Enter the first name of customer");
+        name = sc.nextLine();
+        System.out.println("Enter the age");
+        age=sc.nextInt();
+        System.out.println("Enter the mobileNo");
+        mobileNo=sc.nextLong();
+        System.out.println("Enter the email Id");
+        emailId=sc.next();
+        if(emailId.contains("@")) {
+            System.out.println("Valid E mail Id");
+        }
+        else{
+            System.out.println("Invalid Email Id");
+        }
+        //USE OF WHILE LOOP TILL THE USER ENTERS VALID EMAIL
+        while(!emailId.contains("@")){
+            System.out.println("Enter the valid E mail (It must contain @)");
+            emailId=sc.next();
+        }
+        if(emailId.contains("@")){
+            System.out.println("Thank You!");
         }
     }
+    public static void booking(){
+        Scanner sc=new Scanner(System.in);
+        System.out.println("For Booking, please enter the following details: ");
+        System.out.println("Enter the city FROM which you want to start your journey. ");
+        String source = sc.nextLine();
+        System.out.println("Enter the city TO which you want to end your journey. ");
+        String destination = sc.nextLine();
+        System.out.println("Enter the desired AIRLINE. ");
+        String airline = sc.nextLine();
+        if(FlightLogisticsSystem.flightsGraph.containsKey(source)){
+            for(Map.Entry<String,List<Flight>> set : FlightLogisticsSystem.flightsGraph.entrySet()){
+                if(set.getValue().contains(destination) && set.getValue().contains(airline)){
+                    System.out.println("Flight from source to destination of desired airline is available. ");
+                }
+                else{
+                    System.out.println("Flight from source to destination of desired airline is not available. ");
+                }
+            }
+        }
+        char seatMatrix[][] = new char[9][15];
+        for(char row[] : seatMatrix){
+            Arrays.fill(row, 'A'); // A means Available
+        }
+        for(int i=0; i<seatMatrix.length; i++) {
+            seatMatrix[i][2] = ' ';
+            seatMatrix[i][6] = ' ';
+        }
+        for(int i=0; i<seatMatrix[0].length; i++) {
+            seatMatrix[7][i] = ' ';
+        }
+        System.out.println("Towards the top is Business Class. Below the space is Economy Class. ");
+        for(int i=0; i<seatMatrix.length;i++){
+            for(int j=0; j<seatMatrix[0].length; j++){
+                System.out.print(seatMatrix[i][j]+" ");
+            }
+            System.out.println();
+        }
+        System.out.println("Enter desired row and column no. A stands for available and B stands for Booked.");
+
+        System.out.println("Enter no of passengers. ");
+        int passengers = sc.nextInt();
+        while(passengers!= 0) {
+            System.out.println("Enter the row no. ");
+            int rowNo = sc.nextInt();
+            System.out.println("Enter the col no. ");
+            int colNo = sc.nextInt();
+            if (seatMatrix[rowNo][colNo] != 'B') {
+                seatMatrix[rowNo][colNo] = 'B';
+                passengers--;
+            }
+            else{
+                System.out.println("That seat is already booked!");
+            }
+        }
+        System.out.println("Seats booked!");
+        User.user_details();
+    }
+
+
 }
