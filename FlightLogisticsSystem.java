@@ -70,16 +70,16 @@ class WeatherService {
         int windDegree = wind.get("deg").getAsInt(); // Wind direction
         double visibility = jsonObject.has("visibility") ? jsonObject.get("visibility").getAsDouble() : 10000; // Visibility in meters (default to 10 km)
 
-        // Safety check criteria (you can adjust the thresholds as necessary)
+        // Safety check criteria
         boolean isSafe = true;
         StringBuilder message = new StringBuilder();
 
-        if (windSpeed > 50) { // Wind speed > 50 km/h is considered risky for flights
+        if (windSpeed > 50) {
             isSafe = false;
             message.append("High wind speeds detected. Flights may be rescheduled. ");
         }
 
-        if (visibility < 2000) { // Visibility less than 2 km could be problematic
+        if (visibility < 2000) {
             isSafe = false;
             message.append("Low visibility detected. Flights may be rescheduled. ");
         }
@@ -132,23 +132,25 @@ class Node {
 }
 
 class FlightLogisticsSystem {
-    static Map<String, List<Flight>> flightsGraph = new HashMap<>();
-    static List<String> badWeatherCities = new ArrayList<>();
+    static Map<String, List<Flight>> flightsGraph = new HashMap<>(); // Adjacency list for storing flights between cities
+    static List<String> badWeatherCities = new ArrayList<>();  //Stores cities with bad weather
 
+    // Adds a flight to the graph if weather is safe at both source and destination
     public static void addFlight(String source, String destination, String airline, int cost, int time, String flightNo) {
-        if (WeatherService.getWeatherForCity(source).contains("safe") && WeatherService.getWeatherForCity(destination).contains("safe")) {
+        if(WeatherService.getWeatherForCity(source).contains("safe") && WeatherService.getWeatherForCity(destination).contains("safe")) {
             flightsGraph.putIfAbsent(source, new ArrayList<>());
-            flightsGraph.get(source).add(new Flight(airline, destination, cost, time, flightNo));
-        } else {
-            if (WeatherService.getWeatherForCity(source).contains("rescheduled") && !badWeatherCities.contains(source)) {
+            flightsGraph.get(source).add(new Flight(airline, destination, cost, time,flightNo));
+        }else{
+            //Adds cities with rescheduled flights to the bad weather list
+            if(WeatherService.getWeatherForCity(source).contains("rescheduled") && !badWeatherCities.contains(source)) {
                 badWeatherCities.add(source);
             }
-            if (WeatherService.getWeatherForCity(destination).contains("rescheduled") && !badWeatherCities.contains(destination)) {
+            if(WeatherService.getWeatherForCity(destination).contains("rescheduled") && !badWeatherCities.contains(destination)){
                 badWeatherCities.add(destination);
             }
         }
     }
-
+    // method to remove a specific flight
     public static void removeFlight(String source, String destination, String airline, int cost, int time, String flightNo) {
         List<Flight> flights = flightsGraph.getOrDefault(source, new ArrayList<>());
         flights.removeIf(flight -> flight.destination.equals(destination) && flight.airline.equals(airline) &&
@@ -156,6 +158,7 @@ class FlightLogisticsSystem {
         System.out.println("Flight removed successfully!");
     }
 
+    // Finds the cheapest route from src to dest using Dijkstra's algorithm based on cost
     public static void findCheapestFlight(String src, String dest) {
         PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a.cost));
         Map<String, Integer> minCost = new HashMap<>();
@@ -167,6 +170,7 @@ class FlightLogisticsSystem {
             String currentCity = currentNode.city;
             int costSoFar = currentNode.cost;
 
+            // If destination is reached, print details and return
             if (currentCity.equals(dest)) {
                 System.out.println("Minimum cost to " + dest + " is " + costSoFar + " with time " + currentNode.time + " minutes.");
                 System.out.println("Flights to take:");
@@ -177,7 +181,7 @@ class FlightLogisticsSystem {
                 }
                 return;
             }
-
+            // Explore connected flights and update minimum cost path if a cheaper route is found
             for (Flight flight : flightsGraph.getOrDefault(currentCity, new ArrayList<>())) {
                 int newCost = costSoFar + flight.cost;
                 if (newCost < minCost.getOrDefault(flight.destination, Integer.MAX_VALUE)) {
@@ -191,14 +195,17 @@ class FlightLogisticsSystem {
         System.out.println("No route available from " + src + " to " + dest);
     }
 
-
+    // Finds all routes from src to dest and sorts them by cost
     public static void findAllFlightsSortedByCost(String src, String dest) {
         List<Node> allRoutes = new ArrayList<>();
         List<Flight> currentPath = new ArrayList<>();
         Set<String> visited = new HashSet<>();
 
+        // DFS for finding all paths with cost tracking
         dfsForCost(src, dest, 0, 0, currentPath, allRoutes, visited);
         allRoutes.sort(Comparator.comparingInt(node -> node.cost));
+
+        // Print all routes if available, otherwise print no route found
         if (allRoutes.isEmpty()) {
             System.out.println("No routes available from " + src + " to " + dest);
         } else {
@@ -215,7 +222,7 @@ class FlightLogisticsSystem {
             }
         }
     }
-
+    // DFS helper method to explore all paths by cost
     private static void dfsForCost(String currentCity, String dest, int currentCost, int currentTime, List<Flight> currentPath, List<Node> allRoutes, Set<String> visited) {
         if (currentCity.equals(dest)) {
             allRoutes.add(new Node(currentCity, currentCost, currentTime, new ArrayList<>(currentPath)));
@@ -232,6 +239,7 @@ class FlightLogisticsSystem {
         visited.remove(currentCity);
     }
 
+    // Finds the fastest route from src to dest using Dijkstra's algorithm based on time
     public static void findFastestFlight(String src, String dest) {
         PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a.time));
         Map<String, Integer> minTime = new HashMap<>();
@@ -242,7 +250,7 @@ class FlightLogisticsSystem {
             Node currentNode = pq.poll();
             String currentCity = currentNode.city;
             int timeSoFar = currentNode.time;
-
+            // If destination is reached, print details and return
             if (currentCity.equals(dest)) {
                 System.out.println("Minimum time to " + dest + " is " + timeSoFar + " minutes with cost " + currentNode.cost);
                 System.out.println("Flights to take:");
@@ -253,7 +261,7 @@ class FlightLogisticsSystem {
                 }
                 return;
             }
-
+            // Explore connected flights and update minimum time path if a faster route is found
             for (Flight flight : flightsGraph.getOrDefault(currentCity, new ArrayList<>())) {
                 int newTime = timeSoFar + flight.time;
                 if (newTime < minTime.getOrDefault(flight.destination, Integer.MAX_VALUE)) {
@@ -267,12 +275,17 @@ class FlightLogisticsSystem {
         System.out.println("No route available from " + src + " to " + dest);
     }
 
+    // Finds all routes from src to dest sorted by travel time
     public static void findAllFlightsSortedByTime(String src, String dest) {
         List<Node> allRoutes = new ArrayList<>();
         List<Flight> currentPath = new ArrayList<>();
         Set<String> visited = new HashSet<>();
+
+        // DFS for finding all paths with time tracking
         dfsByTime(src, dest, 0, 0, currentPath, allRoutes, visited);
         allRoutes.sort(Comparator.comparingInt(node -> node.time));
+
+        // Print all routes if available, otherwise print no route found
         if (allRoutes.isEmpty()) {
             System.out.println("No routes available from " + src + " to " + dest);
         } else {
@@ -289,7 +302,7 @@ class FlightLogisticsSystem {
             }
         }
     }
-
+    // DFS method to explore all paths by time
     private static void dfsByTime(String currentCity, String dest, int currentCost, int currentTime, List<Flight> currentPath, List<Node> allRoutes, Set<String> visited) {
         if (currentCity.equals(dest)) {
             allRoutes.add(new Node(currentCity, currentCost, currentTime, new ArrayList<>(currentPath)));
@@ -306,17 +319,20 @@ class FlightLogisticsSystem {
         visited.remove(currentCity);
     }
 
+    // Method to find and display direct flights between two cities
     public static void FlightsWithoutLayovers(String src, String dest) {
 
         boolean directFound = false;
+
+        // Iterate through all flights from the source city
         for (Flight flight : flightsGraph.getOrDefault(src, new ArrayList<>())) {
             if (flight.destination.equals(dest)) {
                 System.out.println("Direct flight found: Airline: " + flight.airline + ", Cost: " + flight.cost + ", Time: " + flight.time + " minutes.");
                 directFound = true;
             }
         }
-        if (!directFound) {
-            System.out.println("No direct flight between " + src + " and " + dest);
+        if(!directFound){
+            System.out.println("No direct flight between "+src+ " and "+dest);
         }
     }
 
@@ -328,50 +344,50 @@ class FlightLogisticsSystem {
 
         System.out.println("We appreciate your patience while we are fetching real-time weather data to ensure your journey is safe and free of turbulent weather. ");
         addFlight("Chennai", "Delhi", "Spice Jet", 10000, 180, "SG801");
-        addFlight("Chennai", "Kolkata", "Air India", 6000, 120, "AI801");
+        addFlight("Chennai", "Kolkata", "Air India", 6000, 120,"AI801");
 
-        addFlight("Delhi", "Kolkata", "Air India", 6000, 150, "AI802");
-        addFlight("Delhi", "Mumbai", "Indigo", 6000, 120, "6E801");
-        addFlight("Delhi", "Pune", "Air India", 8000, 120, "AI803");
-        addFlight("Delhi", "Hyderabad", "Indigo", 7000, 180, "6E802");
+        addFlight("Delhi", "Kolkata", "Air India", 6000, 150,"AI802");
+        addFlight("Delhi", "Mumbai", "Indigo", 6000, 120,"6E801");
+        addFlight("Delhi", "Pune", "Air India", 8000, 120,"AI803");
+        addFlight("Delhi", "Hyderabad", "Indigo", 7000, 180,"6E802");
 
-        addFlight("Kolkata", "Bangalore", "Air India", 6000, 120, "AI804");
-        addFlight("Kolkata", "Hyderabad", "Indigo", 7000, 90, "6E803");
+        addFlight("Kolkata", "Bangalore", "Air India", 6000, 120,"AI804");
+        addFlight("Kolkata", "Hyderabad", "Indigo", 7000, 90,"6E803");
 
-        addFlight("Bhubaneswar", "Mumbai", "Air India", 6000, 150, "AI805");
-        addFlight("Bhubaneswar", "Kolkata", "Indigo", 5000, 90, "6E804");
+        addFlight("Bhubaneswar", "Mumbai", "Air India", 6000, 150,"AI805");
+        addFlight("Bhubaneswar", "Kolkata", "Indigo", 5000, 90,"6E804");
 
-        addFlight("Jaipur", "Kolkata", "Air India", 6000, 90, "AI806");
-        addFlight("Jaipur", "Bhopal", "Indigo", 5000, 60, "6E805");
+        addFlight("Jaipur", "Kolkata", "Air India", 6000, 90,"AI806");
+        addFlight("Jaipur", "Bhopal", "Indigo", 5000, 60,"6E805");
 
-        addFlight("Bhopal", "Hyderabad", "Spice Jet", 5000, 120, "SG802");
-        addFlight("Bhopal", "Mumbai", "Spice Jet", 7000, 120, "SG803");
+        addFlight("Bhopal", "Hyderabad", "Spice Jet", 5000, 120,"SG802");
+        addFlight("Bhopal", "Mumbai", "Spice Jet", 7000, 120,"SG803");
 
-        addFlight("Mumbai", "Delhi", "Spice Jet", 5000, 120, "SG804");
-        addFlight("Mumbai", "Bhopal", "Air India", 4000, 120, "AI807");
-        addFlight("Mumbai", "Jaipur", "Indigo", 5000, 90, "6E806");
-        addFlight("Mumbai", "Delhi", "Air India", 8000, 120, "AI808");
-        addFlight("Mumbai", "Bhopal", "Indigo", 3000, 120, "6E807");
-        addFlight("Mumbai", "Jaipur", "Air India", 7000, 90, "AI809");
+        addFlight("Mumbai", "Delhi", "Spice Jet", 5000, 120,"SG804");
+        addFlight("Mumbai", "Bhopal", "Air India", 4000, 120,"AI807");
+        addFlight("Mumbai", "Jaipur", "Indigo", 5000, 90,"6E806");
+        addFlight("Mumbai", "Delhi", "Air India", 8000, 120,"AI808");
+        addFlight("Mumbai", "Bhopal", "Indigo", 3000, 120,"6E807");
+        addFlight("Mumbai", "Jaipur", "Air India", 7000, 90,"AI809");
 
-        addFlight("Pune", "Hyderabad", "Spice Jet", 5000, 120, "SG805");
-        addFlight("Pune", "Bangalore", "Air India", 6000, 120, "AI810");
-        addFlight("Pune", "Hyderabad", "Air India", 5000, 120, "AI810");
-        addFlight("Pune", "Bangalore", "Spice Jet", 3000, 120, "SG806");
-        addFlight("Pune", "Mumbai", "Indigo", 2000, 20, "6E808");
+        addFlight("Pune", "Hyderabad", "Spice Jet", 5000, 120,"SG805");
+        addFlight("Pune", "Bangalore", "Air India", 6000, 120,"AI810");
+        addFlight("Pune", "Hyderabad", "Air India", 5000, 120,"AI810");
+        addFlight("Pune", "Bangalore", "Spice Jet", 3000, 120,"SG806");
+        addFlight("Pune", "Mumbai", "Indigo", 2000, 20,"6E808");
 
-        addFlight("Hyderabad", "Delhi", "Spice Jet", 7000, 150, "SG806");
-        addFlight("Hyderabad", "Bangalore", "Air India", 3000, 45, "AI811");
-        addFlight("Hyderabad", "Chennai", "Indigo", 2000, 45, "6E809");
+        addFlight("Hyderabad", "Delhi", "Spice Jet", 7000, 150,"SG806");
+        addFlight("Hyderabad", "Bangalore", "Air India", 3000, 45,"AI811");
+        addFlight("Hyderabad", "Chennai", "Indigo", 2000, 45,"6E809");
 
-        addFlight("Bangalore", "Bhubaneswar", "Spice Jet", 7000, 75, "SG807");
-        addFlight("Bangalore", "Mumbai", "Air India", 7000, 90, "AI812");
-        addFlight("Bangalore", "Delhi", "Indigo", 5000, 120, "6E810");
+        addFlight("Bangalore", "Bhubaneswar", "Spice Jet", 7000, 75,"SG807");
+        addFlight("Bangalore", "Mumbai", "Air India", 7000, 90,"AI812");
+        addFlight("Bangalore", "Delhi", "Indigo", 5000, 120,"6E810");
+
 
         System.out.println("Enter 1 to execute admin functionality \n 2 to execute user functionality \n 3 to exit");
         Scanner sc = new Scanner(System.in);
         int adminOrUser;
-
         do {
             System.out.println("Enter 1 to execute admin functionality and 2 to execute user functionality. Enter 3 to exit.");
             adminOrUser = sc.nextInt();
@@ -395,7 +411,6 @@ class FlightLogisticsSystem {
             }
         } while (adminOrUser != 3);
     }
-
 
     // Admin functionality for adding or removing flights
     private static void handleAdminFunctionality() {
@@ -561,7 +576,7 @@ class User {
             }
             //USE OF WHILE LOOP TILL THE USER ENTERS VALID EMAIL
             while (!emailId.contains("@")) {
-                System.out.println("Enter the valid E mail (It must contain @)");
+                System.out.println("Enter the valid Email (It must contain @)");
                 emailId = sc.next();
             }
             if (emailId.contains("@")) {
@@ -578,7 +593,7 @@ class User {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the number of tickets you want to book.");
         int noOfTickets = sc.nextInt();
-        sc.nextLine();  // Clear the newline after nextInt
+        sc.nextLine();
 
         while (noOfTickets != 0) {
             System.out.println("For Booking, please enter the following details: ");
@@ -604,7 +619,7 @@ class User {
                 System.out.println("Source city not found in the flight graph.");
             }
 
-            char seatMatrix[][] = new char[15][9];
+            char seatMatrix[][] = new char[16][10];
             for (char[] row : seatMatrix) {
                 Arrays.fill(row, 'A');
             }
@@ -617,15 +632,11 @@ class User {
                 seatMatrix[7][i] = '-';  // Separator row for Business and Economy classes
             }
 
-            System.out.print("   ");
-            for (int col = 0; col < seatMatrix[0].length; col++) {
-                System.out.print(col + " ");
-            }
-            System.out.println();  // Newline after column indices
-
-            for (int i = 0; i < seatMatrix.length; i++) {
-                System.out.printf("%2d ", i);  // Row index with padding for alignment
-                for (int j = 0; j < seatMatrix[0].length; j++) {
+            System.out.println("Towards the top is Business Class. Below the separator row is Economy Class.");
+            System.out.println("0 1 2 3 4 5 6 7 8 ");  // Column indices
+            for (int i=0; i < seatMatrix.length; i++) {
+                System.out.print(i + " ");
+                for (int j=0; j<seatMatrix[0].length; j++) {
                     System.out.print(seatMatrix[i][j] + " ");
                 }
                 System.out.println();
@@ -642,7 +653,7 @@ class User {
 
                 System.out.println("Enter the column number: ");
                 int colNo = sc.nextInt();
-                if (colNo == 2 || colNo == 6 || rowNo == 7) {
+                if (rowNo == 2 || rowNo == 6 || colNo == 7) {
                     System.out.println("Invalid no. Program will terminate. ");
                     System.exit(0);
                 }
