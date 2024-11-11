@@ -131,28 +131,30 @@ class Node {
     }
 }
 
- class FlightLogisticsSystem {
+class FlightLogisticsSystem {
     static Map<String, List<Flight>> flightsGraph = new HashMap<>();
     static List<String> badWeatherCities = new ArrayList<>();
+
     public static void addFlight(String source, String destination, String airline, int cost, int time, String flightNo) {
-        if(WeatherService.getWeatherForCity(source).contains("safe") && WeatherService.getWeatherForCity(destination).contains("safe")) {
+        if (WeatherService.getWeatherForCity(source).contains("safe") && WeatherService.getWeatherForCity(destination).contains("safe")) {
             flightsGraph.putIfAbsent(source, new ArrayList<>());
-            flightsGraph.get(source).add(new Flight(airline, destination, cost, time,flightNo));
-        }else{
-            if(WeatherService.getWeatherForCity(source).contains("rescheduled") && !badWeatherCities.contains(source)) {
+            flightsGraph.get(source).add(new Flight(airline, destination, cost, time, flightNo));
+        } else {
+            if (WeatherService.getWeatherForCity(source).contains("rescheduled") && !badWeatherCities.contains(source)) {
                 badWeatherCities.add(source);
             }
-            if(WeatherService.getWeatherForCity(destination).contains("rescheduled") && !badWeatherCities.contains(destination)){
+            if (WeatherService.getWeatherForCity(destination).contains("rescheduled") && !badWeatherCities.contains(destination)) {
                 badWeatherCities.add(destination);
             }
         }
     }
-     public static void removeFlight(String source, String destination, String airline, int cost, int time, String flightNo) {
-         List<Flight> flights = flightsGraph.getOrDefault(source, new ArrayList<>());
-         flights.removeIf(flight -> flight.destination.equals(destination) && flight.airline.equals(airline) &&
-                 flight.cost == cost && flight.time == time && flight.flightNo.equals(flightNo));
-         System.out.println("Flight removed successfully!");
-     }
+
+    public static void removeFlight(String source, String destination, String airline, int cost, int time, String flightNo) {
+        List<Flight> flights = flightsGraph.getOrDefault(source, new ArrayList<>());
+        flights.removeIf(flight -> flight.destination.equals(destination) && flight.airline.equals(airline) &&
+                flight.cost == cost && flight.time == time && flight.flightNo.equals(flightNo));
+        System.out.println("Flight removed successfully!");
+    }
 
     public static void findCheapestFlight(String src, String dest) {
         PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a.cost));
@@ -303,6 +305,7 @@ class Node {
         }
         visited.remove(currentCity);
     }
+
     public static void FlightsWithoutLayovers(String src, String dest) {
 
         boolean directFound = false;
@@ -312,8 +315,8 @@ class Node {
                 directFound = true;
             }
         }
-        if(!directFound){
-            System.out.println("No direct flight between "+src+ " and "+dest);
+        if (!directFound) {
+            System.out.println("No direct flight between " + src + " and " + dest);
         }
     }
 
@@ -325,195 +328,215 @@ class Node {
 
         System.out.println("We appreciate your patience while we are fetching real-time weather data to ensure your journey is safe and free of turbulent weather. ");
         addFlight("Chennai", "Delhi", "Spice Jet", 10000, 180, "SG801");
-        addFlight("Chennai", "Kolkata", "Air India", 6000, 120,"AI801");
+        addFlight("Chennai", "Kolkata", "Air India", 6000, 120, "AI801");
 
-        addFlight("Delhi", "Kolkata", "Air India", 6000, 150,"AI802");
-        addFlight("Delhi", "Mumbai", "Indigo", 6000, 120,"6E801");
-        addFlight("Delhi", "Pune", "Air India", 8000, 120,"AI803");
-        addFlight("Delhi", "Hyderabad", "Indigo", 7000, 180,"6E802");
+        addFlight("Delhi", "Kolkata", "Air India", 6000, 150, "AI802");
+        addFlight("Delhi", "Mumbai", "Indigo", 6000, 120, "6E801");
+        addFlight("Delhi", "Pune", "Air India", 8000, 120, "AI803");
+        addFlight("Delhi", "Hyderabad", "Indigo", 7000, 180, "6E802");
 
-        addFlight("Kolkata", "Bangalore", "Air India", 6000, 120,"AI804");
-        addFlight("Kolkata", "Hyderabad", "Indigo", 7000, 90,"6E803");
+        addFlight("Kolkata", "Bangalore", "Air India", 6000, 120, "AI804");
+        addFlight("Kolkata", "Hyderabad", "Indigo", 7000, 90, "6E803");
 
-        addFlight("Bhubaneswar", "Mumbai", "Air India", 6000, 150,"AI805");
-        addFlight("Bhubaneswar", "Kolkata", "Indigo", 5000, 90,"6E804");
+        addFlight("Bhubaneswar", "Mumbai", "Air India", 6000, 150, "AI805");
+        addFlight("Bhubaneswar", "Kolkata", "Indigo", 5000, 90, "6E804");
 
-        addFlight("Jaipur", "Kolkata", "Air India", 6000, 90,"AI806");
-        addFlight("Jaipur", "Bhopal", "Indigo", 5000, 60,"6E805");
+        addFlight("Jaipur", "Kolkata", "Air India", 6000, 90, "AI806");
+        addFlight("Jaipur", "Bhopal", "Indigo", 5000, 60, "6E805");
 
-        addFlight("Bhopal", "Hyderabad", "Spice Jet", 5000, 120,"SG802");
-        addFlight("Bhopal", "Mumbai", "Spice Jet", 7000, 120,"SG803");
+        addFlight("Bhopal", "Hyderabad", "Spice Jet", 5000, 120, "SG802");
+        addFlight("Bhopal", "Mumbai", "Spice Jet", 7000, 120, "SG803");
 
-        addFlight("Mumbai", "Delhi", "Spice Jet", 5000, 120,"SG804");
-        addFlight("Mumbai", "Bhopal", "Air India", 4000, 120,"AI807");
-        addFlight("Mumbai", "Jaipur", "Indigo", 5000, 90,"6E806");
-        addFlight("Mumbai", "Delhi", "Air India", 8000, 120,"AI808");
-        addFlight("Mumbai", "Bhopal", "Indigo", 3000, 120,"6E807");
-        addFlight("Mumbai", "Jaipur", "Air India", 7000, 90,"AI809");
+        addFlight("Mumbai", "Delhi", "Spice Jet", 5000, 120, "SG804");
+        addFlight("Mumbai", "Bhopal", "Air India", 4000, 120, "AI807");
+        addFlight("Mumbai", "Jaipur", "Indigo", 5000, 90, "6E806");
+        addFlight("Mumbai", "Delhi", "Air India", 8000, 120, "AI808");
+        addFlight("Mumbai", "Bhopal", "Indigo", 3000, 120, "6E807");
+        addFlight("Mumbai", "Jaipur", "Air India", 7000, 90, "AI809");
 
-        addFlight("Pune", "Hyderabad", "Spice Jet", 5000, 120,"SG805");
-        addFlight("Pune", "Bangalore", "Air India", 6000, 120,"AI810");
-        addFlight("Pune", "Hyderabad", "Air India", 5000, 120,"AI810");
-        addFlight("Pune", "Bangalore", "Spice Jet", 3000, 120,"SG806");
-        addFlight("Pune", "Mumbai", "Indigo", 2000, 20,"6E808");
+        addFlight("Pune", "Hyderabad", "Spice Jet", 5000, 120, "SG805");
+        addFlight("Pune", "Bangalore", "Air India", 6000, 120, "AI810");
+        addFlight("Pune", "Hyderabad", "Air India", 5000, 120, "AI810");
+        addFlight("Pune", "Bangalore", "Spice Jet", 3000, 120, "SG806");
+        addFlight("Pune", "Mumbai", "Indigo", 2000, 20, "6E808");
 
-        addFlight("Hyderabad", "Delhi", "Spice Jet", 7000, 150,"SG806");
-        addFlight("Hyderabad", "Bangalore", "Air India", 3000, 45,"AI811");
-        addFlight("Hyderabad", "Chennai", "Indigo", 2000, 45,"6E809");
+        addFlight("Hyderabad", "Delhi", "Spice Jet", 7000, 150, "SG806");
+        addFlight("Hyderabad", "Bangalore", "Air India", 3000, 45, "AI811");
+        addFlight("Hyderabad", "Chennai", "Indigo", 2000, 45, "6E809");
 
-        addFlight("Bangalore", "Bhubaneswar", "Spice Jet", 7000, 75,"SG807");
-        addFlight("Bangalore", "Mumbai", "Air India", 7000, 90,"AI812");
-        addFlight("Bangalore", "Delhi", "Indigo", 5000, 120,"6E810");
+        addFlight("Bangalore", "Bhubaneswar", "Spice Jet", 7000, 75, "SG807");
+        addFlight("Bangalore", "Mumbai", "Air India", 7000, 90, "AI812");
+        addFlight("Bangalore", "Delhi", "Indigo", 5000, 120, "6E810");
 
-
-        System.out.println("Enter 1 to execute admin functionality and 2 to execute user functionality.");
+        System.out.println("Enter 1 to execute admin functionality \n 2 to execute user functionality \n 3 to exit");
         Scanner sc = new Scanner(System.in);
-        int adminOrUser = sc.nextInt();
-        sc.nextLine(); // Consume newline
+        int adminOrUser;
 
-        switch (adminOrUser) {
-            case 1:
-                handleAdminFunctionality();
-                break;
+        do {
+            System.out.println("Enter 1 to execute admin functionality and 2 to execute user functionality. Enter 3 to exit.");
+            adminOrUser = sc.nextInt();
+            sc.nextLine(); // Consume newline
 
-            case 2:
-                handleUserFunctionality();
-                break;
+            switch (adminOrUser) {
+                case 1:
+                    handleAdminFunctionality();
+                    break;
 
-            default:
-                System.out.println("Invalid option!");
-        }
+                case 2:
+                    handleUserFunctionality();
+                    break;
+
+                case 3:
+                    System.out.println("Exiting application.");
+                    break;
+
+                default:
+                    System.out.println("Invalid option! Please enter 1 for admin or 2 for user functionality, or 3 to exit.");
+            }
+        } while (adminOrUser != 3);
     }
 
-     // Admin functionality for adding or removing flights
-     private static void handleAdminFunctionality() {
-         Scanner sc = new Scanner(System.in);
-         System.out.println("Choose an option: \n1. Add flight\n2. Remove flight");
-         int ch = sc.nextInt();
-         sc.nextLine(); // Consume newline
 
-         String src, dest, airline, flightNo;
-         int cost, time;
+    // Admin functionality for adding or removing flights
+    private static void handleAdminFunctionality() {
+        Scanner sc = new Scanner(System.in);
+        int ch;
 
-         switch (ch) {
-             case 1:
-                 // Gather flight details for adding a new flight
+        do {
+            System.out.println("Admin Menu: \n1. Add flight\n2. Remove flight\n3. Return to main menu");
+            ch = sc.nextInt();
+            sc.nextLine(); // Consume newline
 
+            String src, dest, airline, flightNo;
+            int cost, time;
 
-                 System.out.println("Enter source city:");
-                 src = sc.nextLine();
-                 System.out.println("Enter destination city:");
-                 dest = sc.nextLine();
-                 if (badWeatherCities.contains(src)) {
-                     System.out.println("Sorry no flights available due to bad weather. Details of the weather are as follows: ");
-                     System.out.println(WeatherService.getWeatherForCity(src));
-                     return;
-                 }
+            switch (ch) {
+                case 1:
+                    System.out.println("Enter source city:");
+                    src = sc.nextLine();
+                    System.out.println("Enter destination city:");
+                    dest = sc.nextLine();
+                    if (badWeatherCities.contains(src)) {
+                        System.out.println("Sorry no flights available due to bad weather. Details of the weather are as follows: ");
+                        System.out.println(WeatherService.getWeatherForCity(src));
+                        return;
+                    }
 
-                 if (badWeatherCities.contains(dest)) {
-                     System.out.println("Sorry no flights available due to bad weather. Details of the weather are as follows: ");
-                     System.out.println(WeatherService.getWeatherForCity(dest));
-                     return;
-                 }
+                    if (badWeatherCities.contains(dest)) {
+                        System.out.println("Sorry no flights available due to bad weather. Details of the weather are as follows: ");
+                        System.out.println(WeatherService.getWeatherForCity(dest));
+                        return;
+                    }
 
-                 System.out.println("Enter airline:");
-                 airline = sc.nextLine();
-                 System.out.println("Enter cost:");
-                 cost = sc.nextInt();
-                 System.out.println("Enter time:");
-                 time = sc.nextInt();
-                 sc.nextLine(); // Consume newline
-                 System.out.println("Enter flight number:");
-                 flightNo = sc.nextLine();
+                    System.out.println("Enter airline:");
+                    airline = sc.nextLine();
+                    System.out.println("Enter cost:");
+                    cost = sc.nextInt();
+                    System.out.println("Enter time:");
+                    time = sc.nextInt();
+                    sc.nextLine(); // Consume newline
+                    System.out.println("Enter flight number:");
+                    flightNo = sc.nextLine();
 
-                 addFlight(src, dest, airline, cost, time, flightNo);
-                 break;
+                    addFlight(src, dest, airline, cost, time, flightNo);
+                    break;
 
-             case 2:
-                 // Gather flight details for removing an existing flight
-                 System.out.println("Enter source city:");
-                 src = sc.nextLine();
-                 System.out.println("Enter destination city:");
-                 dest = sc.nextLine();
-                 System.out.println("Enter airline:");
-                 airline = sc.nextLine();
-                 System.out.println("Enter cost:");
-                 cost = sc.nextInt();
-                 System.out.println("Enter time:");
-                 time = sc.nextInt();
-                 sc.nextLine(); // Consume newline
-                 System.out.println("Enter flight number:");
-                 flightNo = sc.nextLine();
-                 removeFlight(src, dest, airline, cost, time, flightNo);
-                 break;
+                case 2:
+                    // Gather flight details for removing an existing flight
+                    System.out.println("Enter source city:");
+                    src = sc.nextLine();
+                    System.out.println("Enter destination city:");
+                    dest = sc.nextLine();
+                    System.out.println("Enter airline:");
+                    airline = sc.nextLine();
+                    System.out.println("Enter cost:");
+                    cost = sc.nextInt();
+                    System.out.println("Enter time:");
+                    time = sc.nextInt();
+                    sc.nextLine(); // Consume newline
+                    System.out.println("Enter flight number:");
+                    flightNo = sc.nextLine();
+                    removeFlight(src, dest, airline, cost, time, flightNo);
+                    break;
+                case 3:
+                    System.out.println("Returning to main menu.");
+                    break;
 
-             default:
-                 System.out.println("Invalid option!");
-         }
-     }
+                default:
+                    System.out.println("Invalid option! Please choose a valid option from the Admin Menu.");
+            }
+        } while (ch != 3);
+    }
 
-     // User functionality for finding flights and booking
-     private static void handleUserFunctionality() {
-         Scanner sc = new Scanner(System.in);
-         System.out.println("Choose an option: \n1. Minimum cost\n2. All possible routes sorted by cost\n3. Minimum time\n4. All possible routes sorted by time\n5. Flights with/without layovers");
-         int choice = sc.nextInt();
-         sc.nextLine(); // Consume newline
+    // User functionality for finding flights and booking
+    private static void handleUserFunctionality() {
+        Scanner sc = new Scanner(System.in);
+        int choice;
+        do {
+            System.out.println("User Menu: \n1. Minimum cost\n2. All possible routes sorted by cost\n3. Minimum time\n4. All possible routes sorted by time\n5. Flights with/without layovers\n6. Return to main menu");
+            choice = sc.nextInt();
+            sc.nextLine(); // Consume newline
 
-         System.out.println("Enter source city: ");
-         String source = sc.nextLine();
-         if (badWeatherCities.contains(source)) {
-             System.out.println("Sorry no flights available due to bad weather. Details of the weather are as follows: ");
-             System.out.println(WeatherService.getWeatherForCity(source));
-             return;
-         }
-         System.out.println("Enter destination city: ");
-         String destination = sc.nextLine();
-         if (badWeatherCities.contains(destination)) {
-             System.out.println("Sorry no flights available due to bad weather. Details of the weather are as follows: ");
-             System.out.println(WeatherService.getWeatherForCity(destination));
-             return;
-         }
+            if (choice == 6) {
+                System.out.println("Returning to main menu.");
+                break;
+            }
 
-         switch (choice) {
-             case 1:
-                 findCheapestFlight(source, destination);
-                 break;
+            System.out.println("Enter source city: ");
+            String source = sc.nextLine();
+            if (badWeatherCities.contains(source)) {
+                System.out.println("Sorry no flights available due to bad weather. Details of the weather are as follows: ");
+                System.out.println(WeatherService.getWeatherForCity(source));
+                return;
+            }
+            System.out.println("Enter destination city: ");
+            String destination = sc.nextLine();
+            if (badWeatherCities.contains(destination)) {
+                System.out.println("Sorry no flights available due to bad weather. Details of the weather are as follows: ");
+                System.out.println(WeatherService.getWeatherForCity(destination));
+                return;
+            }
 
-             case 2:
-                 findAllFlightsSortedByCost(source, destination);
-                 break;
+            switch (choice) {
+                case 1:
+                    findCheapestFlight(source, destination);
+                    break;
 
-             case 3:
-                 findFastestFlight(source, destination);
-                 break;
+                case 2:
+                    findAllFlightsSortedByCost(source, destination);
+                    break;
 
-             case 4:
-                 findAllFlightsSortedByTime(source, destination); // Implement this method
-                 break;
+                case 3:
+                    findFastestFlight(source, destination);
+                    break;
 
-             case 5:
-                 FlightsWithoutLayovers(source, destination); // Implement this method
-                 break;
+                case 4:
+                    findAllFlightsSortedByTime(source, destination); // Implement this method
+                    break;
 
-             default:
-                 System.out.println("Invalid option!");
-                 return;
-         }
+                case 5:
+                    FlightsWithoutLayovers(source, destination); // Implement this method
+                    break;
 
-         // Option to proceed to booking after displaying flight options
+                default:
+                    System.out.println("Invalid option!");
+                    continue;
+            }
 
-         System.out.println("Do you want to proceed to booking now? Enter Y for yes or N for no");
-         String proceedToBooking = sc.nextLine();
+            System.out.println("Do you want to proceed to booking now? Enter Y for yes or N for no");
+            String proceedToBooking = sc.nextLine();
 
-         if (proceedToBooking.equalsIgnoreCase("Y")) {
-             User.booking(); // Implement the booking functionality in User class
-         } else if (proceedToBooking.equalsIgnoreCase("N")) {
-             System.out.println("Returning to main menu.");
-         } else {
-             System.out.println("Wrong value entered!");
-         }
-     }
- }
+            if (proceedToBooking.equalsIgnoreCase("Y")) {
+                User.booking(); // Ensure the booking functionality is implemented in User class
+            } else if (proceedToBooking.equalsIgnoreCase("N")) {
+                System.out.println("Returning to main menu.");
+            } else {
+                System.out.println("Invalid entry! Returning to main menu.");
+            }
+
+        } while (choice != 6);
+    }
+}
 class User {
     static String name;
     static long mobileNo;
