@@ -1,3 +1,5 @@
+
+
 /*
 DSA PROJECT :
 AirEase: A Flight Logistics System
@@ -8,8 +10,10 @@ UCE2023604
 
 Problem Statement :
 AirEase aims to simplify the airline management process by providing a user-friendly system for both travelers and administrators.
-The system will allow users to search for and book flights based on minimum cost or shortest travel distance between cities, facilitating quick decision-making for travelers.
-Admins can access a dedicated interface to manage flight bookings, reschedule flights based on real-time weather data, and ensure a seamless experience for users despite weather disruptions.
+The system will allow users to search for and book flights based on minimum cost or shortest travel distance between cities,
+facilitating quick decision-making for travelers.
+Admins can access a dedicated interface to manage flight bookings, reschedule flights based on real-time weather data,
+and ensure a seamless experience for users despite weather disruptions.
 This dual-interface system will be built to handle the complexities of real-world logistics with efficient data structures and algorithms.
  */
 
@@ -680,203 +684,517 @@ class User {
     }
 }
 
-/* OUTPUT OF ADMIN FUNCTIONALITY:
-
+/* "D:\Program Files\Java\jdk-21\bin\java.exe" "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2024.1\lib\idea_rt.jar=59236:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2024.1\bin" -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath C:\Users\Admin\IdeaProjects\weatherTrying\target\classes;C:\Users\Admin\.m2\repository\com\google\code\gson\gson\2.8.8\gson-2.8.8.jar FlightLogisticsSystem
 Welcome to AirEase - Your Ultimate Flight Logistics Companion!
 Effortlessly manage flights, track routes, and ensure a smooth journey for passengers and cargo alike. From real-time updates to optimized routing, AirEase is here to make airline management simpler and more efficient.
 Fasten your seatbelt, and let’s get started!
 We appreciate your patience while we are fetching real-time weather data to ensure your journey is safe and free of turbulent weather.
-Enter 1 to execute admin functionality and 2 to execute user functionality.
+Enter 1 to execute admin functionality
+ 2 to execute user functionality
+ 3 to exit
+Enter 1 to execute admin functionality and 2 to execute user functionality. Enter 3 to exit.
 1
-Choose an option:
+Admin Menu:
 1. Add flight
 2. Remove flight
+3. Return to main menu
 1
 Enter source city:
 Pune
 Enter destination city:
-Mumbai
+Hyderabad
 Enter airline:
-Spice Jet
+Air India
 Enter cost:
-3000
+10000
 Enter time:
-25
+120
 Enter flight number:
-SG870
-
-
-OUTPUT OF USER FUNCTIONALITY
-Welcome to AirEase - Your Ultimate Flight Logistics Companion!
-Effortlessly manage flights, track routes, and ensure a smooth journey for passengers and cargo alike. From real-time updates to optimized routing, AirEase is here to make airline management simpler and more efficient.
-Fasten your seatbelt, and let’s get started!
-We appreciate your patience while we are fetching real-time weather data to ensure your journey is safe and free of turbulent weather.
-Enter 1 to execute admin functionality and 2 to execute user functionality.
+6C309
+Admin Menu:
+1. Add flight
+2. Remove flight
+3. Return to main menu
+3
+Returning to main menu.
+Enter 1 to execute admin functionality and 2 to execute user functionality. Enter 3 to exit.
 2
-Choose an option:
+User Menu:
 1. Minimum cost
 2. All possible routes sorted by cost
 3. Minimum time
 4. All possible routes sorted by time
 5. Flights with/without layovers
+6. Return to main menu
+1
+Enter source city:
+Delhi
+Sorry no flights available due to bad weather. Details of the weather are as follows:
+Temperature: 23.1°C, Condition: haze, Humidity: 73%, Wind Speed: 0.0 km/h, Visibility: 1000 meters, Status: Low visibility detected. Flights may be rescheduled. Conditions indicate potential delays or rescheduling.
+Enter 1 to execute admin functionality and 2 to execute user functionality. Enter 3 to exit.
+2
+User Menu:
+1. Minimum cost
+2. All possible routes sorted by cost
+3. Minimum time
+4. All possible routes sorted by time
+5. Flights with/without layovers
+6. Return to main menu
 1
 Enter source city:
 Pune
 Enter destination city:
-Delhi
-Minimum cost to Delhi is 7000 with time 140 minutes.
+Chennai
+Minimum cost to Chennai is 7000 with time 165 minutes.
+Flights to take:
+Airline: Spice Jet, From: Pune, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Do you want to proceed to booking now? Enter Y for yes or N for no
+N
+Returning to main menu.
+User Menu:
+1. Minimum cost
+2. All possible routes sorted by cost
+3. Minimum time
+4. All possible routes sorted by time
+5. Flights with/without layovers
+6. Return to main menu
+2
+Enter source city:
+Pune
+Enter destination city:
+Mumbai
+All possible routes from Pune to Mumbai sorted by cost:
+Total cost: 2000, Total time: 20 minutes
 Flights to take:
 Airline: Indigo, From: Pune, To: Mumbai, Cost: 2000, Time: 20 minutes.
-Airline: Spice Jet, From: Mumbai, To: Delhi, Cost: 5000, Time: 120 minutes.
+
+Total cost: 10000, Total time: 210 minutes
+Flights to take:
+Airline: Spice Jet, From: Pune, To: Bangalore, Cost: 3000, Time: 120 minutes.
+Airline: Air India, From: Bangalore, To: Mumbai, Cost: 7000, Time: 90 minutes.
+
+Total cost: 13000, Total time: 210 minutes
+Flights to take:
+Airline: Air India, From: Pune, To: Bangalore, Cost: 6000, Time: 120 minutes.
+Airline: Air India, From: Bangalore, To: Mumbai, Cost: 7000, Time: 90 minutes.
+
+Total cost: 15000, Total time: 255 minutes
+Flights to take:
+Airline: Spice Jet, From: Pune, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Air India, From: Hyderabad, To: Bangalore, Cost: 3000, Time: 45 minutes.
+Airline: Air India, From: Bangalore, To: Mumbai, Cost: 7000, Time: 90 minutes.
+
+Total cost: 15000, Total time: 255 minutes
+Flights to take:
+Airline: Air India, From: Pune, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Air India, From: Hyderabad, To: Bangalore, Cost: 3000, Time: 45 minutes.
+Airline: Air India, From: Bangalore, To: Mumbai, Cost: 7000, Time: 90 minutes.
+
+Total cost: 16000, Total time: 345 minutes
+Flights to take:
+Airline: Spice Jet, From: Pune, To: Bangalore, Cost: 3000, Time: 120 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Air India, From: Bhubaneswar, To: Mumbai, Cost: 6000, Time: 150 minutes.
+
+Total cost: 19000, Total time: 345 minutes
+Flights to take:
+Airline: Air India, From: Pune, To: Bangalore, Cost: 6000, Time: 120 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Air India, From: Bhubaneswar, To: Mumbai, Cost: 6000, Time: 150 minutes.
+
+Total cost: 20000, Total time: 255 minutes
+Flights to take:
+Airline: Air India, From: Pune, To: Hyderabad, Cost: 10000, Time: 120 minutes.
+Airline: Air India, From: Hyderabad, To: Bangalore, Cost: 3000, Time: 45 minutes.
+Airline: Air India, From: Bangalore, To: Mumbai, Cost: 7000, Time: 90 minutes.
+
+Total cost: 21000, Total time: 390 minutes
+Flights to take:
+Airline: Spice Jet, From: Pune, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Air India, From: Hyderabad, To: Bangalore, Cost: 3000, Time: 45 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Air India, From: Bhubaneswar, To: Mumbai, Cost: 6000, Time: 150 minutes.
+
+Total cost: 21000, Total time: 390 minutes
+Flights to take:
+Airline: Air India, From: Pune, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Air India, From: Hyderabad, To: Bangalore, Cost: 3000, Time: 45 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Air India, From: Bhubaneswar, To: Mumbai, Cost: 6000, Time: 150 minutes.
+
+Total cost: 26000, Total time: 495 minutes
+Flights to take:
+Airline: Spice Jet, From: Pune, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+Airline: Air India, From: Kolkata, To: Bangalore, Cost: 6000, Time: 120 minutes.
+Airline: Air India, From: Bangalore, To: Mumbai, Cost: 7000, Time: 90 minutes.
+
+Total cost: 26000, Total time: 495 minutes
+Flights to take:
+Airline: Air India, From: Pune, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+Airline: Air India, From: Kolkata, To: Bangalore, Cost: 6000, Time: 120 minutes.
+Airline: Air India, From: Bangalore, To: Mumbai, Cost: 7000, Time: 90 minutes.
+
+Total cost: 26000, Total time: 390 minutes
+Flights to take:
+Airline: Air India, From: Pune, To: Hyderabad, Cost: 10000, Time: 120 minutes.
+Airline: Air India, From: Hyderabad, To: Bangalore, Cost: 3000, Time: 45 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Air India, From: Bhubaneswar, To: Mumbai, Cost: 6000, Time: 150 minutes.
+
+Total cost: 31000, Total time: 495 minutes
+Flights to take:
+Airline: Air India, From: Pune, To: Hyderabad, Cost: 10000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+Airline: Air India, From: Kolkata, To: Bangalore, Cost: 6000, Time: 120 minutes.
+Airline: Air India, From: Bangalore, To: Mumbai, Cost: 7000, Time: 90 minutes.
+
+Total cost: 32000, Total time: 630 minutes
+Flights to take:
+Airline: Spice Jet, From: Pune, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+Airline: Air India, From: Kolkata, To: Bangalore, Cost: 6000, Time: 120 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Air India, From: Bhubaneswar, To: Mumbai, Cost: 6000, Time: 150 minutes.
+
+Total cost: 32000, Total time: 630 minutes
+Flights to take:
+Airline: Air India, From: Pune, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+Airline: Air India, From: Kolkata, To: Bangalore, Cost: 6000, Time: 120 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Air India, From: Bhubaneswar, To: Mumbai, Cost: 6000, Time: 150 minutes.
+
+Total cost: 37000, Total time: 630 minutes
+Flights to take:
+Airline: Air India, From: Pune, To: Hyderabad, Cost: 10000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+Airline: Air India, From: Kolkata, To: Bangalore, Cost: 6000, Time: 120 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Air India, From: Bhubaneswar, To: Mumbai, Cost: 6000, Time: 150 minutes.
+
+Do you want to proceed to booking now? Enter Y for yes or N for no
+N
+Returning to main menu.
+User Menu:
+1. Minimum cost
+2. All possible routes sorted by cost
+3. Minimum time
+4. All possible routes sorted by time
+5. Flights with/without layovers
+6. Return to main menu
+3
+Enter source city:
+Pune
+Enter destination city:
+Kolkata
+Minimum time to Kolkata is 285 minutes with cost 13000
+Flights to take:
+Airline: Spice Jet, From: Pune, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+Do you want to proceed to booking now? Enter Y for yes or N for no
+N
+Returning to main menu.
+User Menu:
+1. Minimum cost
+2. All possible routes sorted by cost
+3. Minimum time
+4. All possible routes sorted by time
+5. Flights with/without layovers
+6. Return to main menu
+4
+Enter source city:
+Pune
+Enter destination city:
+Kolkata
+All possible routes from Pune to Kolkata sorted by time:
+Total time: 285 minutes, Total cost: 13000
+Flights to take:
+Airline: Spice Jet, From: Pune, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+
+Total time: 285 minutes, Total cost: 18000
+Flights to take:
+Airline: Air India, From: Pune, To: Bangalore, Cost: 6000, Time: 120 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Indigo, From: Bhubaneswar, To: Kolkata, Cost: 5000, Time: 90 minutes.
+
+Total time: 285 minutes, Total cost: 13000
+Flights to take:
+Airline: Air India, From: Pune, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+
+Total time: 285 minutes, Total cost: 15000
+Flights to take:
+Airline: Spice Jet, From: Pune, To: Bangalore, Cost: 3000, Time: 120 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Indigo, From: Bhubaneswar, To: Kolkata, Cost: 5000, Time: 90 minutes.
+
+Total time: 285 minutes, Total cost: 18000
+Flights to take:
+Airline: Air India, From: Pune, To: Hyderabad, Cost: 10000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+
+Total time: 330 minutes, Total cost: 20000
+Flights to take:
+Airline: Spice Jet, From: Pune, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Air India, From: Hyderabad, To: Bangalore, Cost: 3000, Time: 45 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Indigo, From: Bhubaneswar, To: Kolkata, Cost: 5000, Time: 90 minutes.
+
+Total time: 330 minutes, Total cost: 20000
+Flights to take:
+Airline: Air India, From: Pune, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Air India, From: Hyderabad, To: Bangalore, Cost: 3000, Time: 45 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Indigo, From: Bhubaneswar, To: Kolkata, Cost: 5000, Time: 90 minutes.
+
+Total time: 330 minutes, Total cost: 25000
+Flights to take:
+Airline: Air India, From: Pune, To: Hyderabad, Cost: 10000, Time: 120 minutes.
+Airline: Air India, From: Hyderabad, To: Bangalore, Cost: 3000, Time: 45 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Indigo, From: Bhubaneswar, To: Kolkata, Cost: 5000, Time: 90 minutes.
+
+Total time: 425 minutes, Total cost: 19000
+Flights to take:
+Airline: Indigo, From: Pune, To: Mumbai, Cost: 2000, Time: 20 minutes.
+Airline: Air India, From: Mumbai, To: Bhopal, Cost: 4000, Time: 120 minutes.
+Airline: Spice Jet, From: Bhopal, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+
+Total time: 425 minutes, Total cost: 18000
+Flights to take:
+Airline: Indigo, From: Pune, To: Mumbai, Cost: 2000, Time: 20 minutes.
+Airline: Indigo, From: Mumbai, To: Bhopal, Cost: 3000, Time: 120 minutes.
+Airline: Spice Jet, From: Bhopal, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+
+Total time: 470 minutes, Total cost: 26000
+Flights to take:
+Airline: Indigo, From: Pune, To: Mumbai, Cost: 2000, Time: 20 minutes.
+Airline: Air India, From: Mumbai, To: Bhopal, Cost: 4000, Time: 120 minutes.
+Airline: Spice Jet, From: Bhopal, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Air India, From: Hyderabad, To: Bangalore, Cost: 3000, Time: 45 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Indigo, From: Bhubaneswar, To: Kolkata, Cost: 5000, Time: 90 minutes.
+
+Total time: 470 minutes, Total cost: 25000
+Flights to take:
+Airline: Indigo, From: Pune, To: Mumbai, Cost: 2000, Time: 20 minutes.
+Airline: Indigo, From: Mumbai, To: Bhopal, Cost: 3000, Time: 120 minutes.
+Airline: Spice Jet, From: Bhopal, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Air India, From: Hyderabad, To: Bangalore, Cost: 3000, Time: 45 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Indigo, From: Bhubaneswar, To: Kolkata, Cost: 5000, Time: 90 minutes.
+
+Total time: 615 minutes, Total cost: 30000
+Flights to take:
+Airline: Air India, From: Pune, To: Bangalore, Cost: 6000, Time: 120 minutes.
+Airline: Air India, From: Bangalore, To: Mumbai, Cost: 7000, Time: 90 minutes.
+Airline: Air India, From: Mumbai, To: Bhopal, Cost: 4000, Time: 120 minutes.
+Airline: Spice Jet, From: Bhopal, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+
+Total time: 615 minutes, Total cost: 29000
+Flights to take:
+Airline: Air India, From: Pune, To: Bangalore, Cost: 6000, Time: 120 minutes.
+Airline: Air India, From: Bangalore, To: Mumbai, Cost: 7000, Time: 90 minutes.
+Airline: Indigo, From: Mumbai, To: Bhopal, Cost: 3000, Time: 120 minutes.
+Airline: Spice Jet, From: Bhopal, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+
+Total time: 615 minutes, Total cost: 27000
+Flights to take:
+Airline: Spice Jet, From: Pune, To: Bangalore, Cost: 3000, Time: 120 minutes.
+Airline: Air India, From: Bangalore, To: Mumbai, Cost: 7000, Time: 90 minutes.
+Airline: Air India, From: Mumbai, To: Bhopal, Cost: 4000, Time: 120 minutes.
+Airline: Spice Jet, From: Bhopal, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+
+Total time: 615 minutes, Total cost: 26000
+Flights to take:
+Airline: Spice Jet, From: Pune, To: Bangalore, Cost: 3000, Time: 120 minutes.
+Airline: Air India, From: Bangalore, To: Mumbai, Cost: 7000, Time: 90 minutes.
+Airline: Indigo, From: Mumbai, To: Bhopal, Cost: 3000, Time: 120 minutes.
+Airline: Spice Jet, From: Bhopal, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+
+Total time: 750 minutes, Total cost: 36000
+Flights to take:
+Airline: Air India, From: Pune, To: Bangalore, Cost: 6000, Time: 120 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Air India, From: Bhubaneswar, To: Mumbai, Cost: 6000, Time: 150 minutes.
+Airline: Air India, From: Mumbai, To: Bhopal, Cost: 4000, Time: 120 minutes.
+Airline: Spice Jet, From: Bhopal, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+
+Total time: 750 minutes, Total cost: 35000
+Flights to take:
+Airline: Air India, From: Pune, To: Bangalore, Cost: 6000, Time: 120 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Air India, From: Bhubaneswar, To: Mumbai, Cost: 6000, Time: 150 minutes.
+Airline: Indigo, From: Mumbai, To: Bhopal, Cost: 3000, Time: 120 minutes.
+Airline: Spice Jet, From: Bhopal, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+
+Total time: 750 minutes, Total cost: 33000
+Flights to take:
+Airline: Spice Jet, From: Pune, To: Bangalore, Cost: 3000, Time: 120 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Air India, From: Bhubaneswar, To: Mumbai, Cost: 6000, Time: 150 minutes.
+Airline: Air India, From: Mumbai, To: Bhopal, Cost: 4000, Time: 120 minutes.
+Airline: Spice Jet, From: Bhopal, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+
+Total time: 750 minutes, Total cost: 32000
+Flights to take:
+Airline: Spice Jet, From: Pune, To: Bangalore, Cost: 3000, Time: 120 minutes.
+Airline: Spice Jet, From: Bangalore, To: Bhubaneswar, Cost: 7000, Time: 75 minutes.
+Airline: Air India, From: Bhubaneswar, To: Mumbai, Cost: 6000, Time: 150 minutes.
+Airline: Indigo, From: Mumbai, To: Bhopal, Cost: 3000, Time: 120 minutes.
+Airline: Spice Jet, From: Bhopal, To: Hyderabad, Cost: 5000, Time: 120 minutes.
+Airline: Indigo, From: Hyderabad, To: Chennai, Cost: 2000, Time: 45 minutes.
+Airline: Air India, From: Chennai, To: Kolkata, Cost: 6000, Time: 120 minutes.
+
+Do you want to proceed to booking now? Enter Y for yes or N for no
+N
+Returning to main menu.
+User Menu:
+1. Minimum cost
+2. All possible routes sorted by cost
+3. Minimum time
+4. All possible routes sorted by time
+5. Flights with/without layovers
+6. Return to main menu
+5
+Enter source city:
+Pune
+Enter destination city:
+Kolkata
+No direct flight between Pune and Kolkata
+Do you want to proceed to booking now? Enter Y for yes or N for no
+N
+Returning to main menu.
+User Menu:
+1. Minimum cost
+2. All possible routes sorted by cost
+3. Minimum time
+4. All possible routes sorted by time
+5. Flights with/without layovers
+6. Return to main menu
+5
+Enter source city:
+Hyderabad
+Enter destination city:
+Bangalore
+Direct flight found: Airline: Air India, Cost: 3000, Time: 45 minutes.
 Do you want to proceed to booking now? Enter Y for yes or N for no
 Y
 Enter the number of tickets you want to book.
-2
+1
 For Booking, please enter the following details:
 Enter the city FROM which you want to start your journey.
-Pune
+Hyderabad
 Enter the city TO which you want to end your journey.
-Mumbai
+Bangalore
 Enter the desired AIRLINE.
-Indigo
+Air India
 Flight from source to destination of desired airline is available.
-   0 1 2 3 4 5 6 7 8
- 0 A A   A A A   A A
- 1 A A   A A A   A A
- 2 A A   A A A   A A
- 3 A A   A A A   A A
- 4 A A   A A A   A A
- 5 A A   A A A   A A
- 6 A A   A A A   A A
- 7 - - - - - - - - -
- 8 A A   A A A   A A
- 9 A A   A A A   A A
-10 A A   A A A   A A
-11 A A   A A A   A A
-12 A A   A A A   A A
-13 A A   A A A   A A
-14 A A   A A A   A A
+Towards the top is Business Class. Below the separator row is Economy Class.
+0 1 2 3 4 5 6 7 8
+0 A A   A A A   A A A
+1 A A   A A A   A A A
+2 A A   A A A   A A A
+3 A A   A A A   A A A
+4 A A   A A A   A A A
+5 A A   A A A   A A A
+6 A A   A A A   A A A
+7 - - - - - - - - - -
+8 A A   A A A   A A A
+9 A A   A A A   A A A
+10 A A   A A A   A A A
+11 A A   A A A   A A A
+12 A A   A A A   A A A
+13 A A   A A A   A A A
+14 A A   A A A   A A A
+15 A A   A A A   A A A
 Enter the number of passengers.
 2
 Enter the row number:
-1
+0
 Enter the column number:
 0
 Now seat matrix is:
-A A   A A A   A A
-B A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-- - - - - - - - -
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
+B A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+- - - - - - - - - -
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
 Enter the row number:
-1
-Enter the column number:
-
-1
-Now seat matrix is:
-A A   A A A   A A
-B B   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-- - - - - - - - -
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-Seats booked!
-For Booking, please enter the following details:
-Enter the city FROM which you want to start your journey.
-Mumbai
-Enter the city TO which you want to end your journey.
-Delhi
-Enter the desired AIRLINE.
-Spice Jet
-Flight from source to destination of desired airline is available.
-   0 1 2 3 4 5 6 7 8
- 0 A A   A A A   A A
- 1 A A   A A A   A A
- 2 A A   A A A   A A
- 3 A A   A A A   A A
- 4 A A   A A A   A A
- 5 A A   A A A   A A
- 6 A A   A A A   A A
- 7 - - - - - - - - -
- 8 A A   A A A   A A
- 9 A A   A A A   A A
-10 A A   A A A   A A
-11 A A   A A A   A A
-12 A A   A A A   A A
-13 A A   A A A   A A
-14 A A   A A A   A A
-Enter the number of passengers.
-2
-Enter the row number:
-5
-Enter the column number:
 0
-Now seat matrix is:
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-B A   A A A   A A
-A A   A A A   A A
-- - - - - - - - -
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-Enter the row number:
-5
 Enter the column number:
 1
 Now seat matrix is:
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-B B   A A A   A A
-A A   A A A   A A
-- - - - - - - - -
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
-A A   A A A   A A
+B B   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+- - - - - - - - - -
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
+A A   A A A   A A A
 Seats booked!
 Enter the name of customer
 Sanika
 Enter the age
 19
 Enter the mobileNo
-9999996666
+998000000
 Enter the email Id
 sanika
 Invalid Email Id
-Enter the valid E mail (It must contain @)
+Enter the valid Email (It must contain @)
 sanika@gmail.com
 Thank You!
 Enter the name of customer
@@ -884,13 +1202,46 @@ Shrishti
 Enter the age
 20
 Enter the mobileNo
-7878787878
+9898989898
 Enter the email Id
-shrishti@yahoo.com
+shrishti@gmail.com
 Valid E mail Id
 Thank You!
 Your tickets have been booked successfully! We hope you have a happy and safe journey
+User Menu:
+1. Minimum cost
+2. All possible routes sorted by cost
+3. Minimum time
+4. All possible routes sorted by time
+5. Flights with/without layovers
+6. Return to main menu
+6
+Returning to main menu.
+Enter 1 to execute admin functionality and 2 to execute user functionality. Enter 3 to exit.
+1
+Admin Menu:
+1. Add flight
+2. Remove flight
+3. Return to main menu
+2
+Enter source city:
+Pune
+Enter destination city:
+Mumbai
+Enter airline:
+Indigo
+Enter cost:
+2000
+Enter time:
+20
+Enter flight number:
+6E890
+Flight removed successfully!
+Admin Menu:
+1. Add flight
+2. Remove flight
+3. Return to main menu
 
-Process finished with exit code 0
+Process finished with exit code 130
 
  */
